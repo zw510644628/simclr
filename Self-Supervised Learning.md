@@ -52,6 +52,7 @@
 ![[公式]](https://www.zhihu.com/equation?tex=z_i%3Dg%28h_i%29%3DW%5E%7B%282%29%7D%5Csigma+%28W%5E%7B%281%29%7Dh_i%29%5C%5C)
 
 接下来的目标就是最大化同一张图片得到的 ![[公式]](https://www.zhihu.com/equation?tex=z_i%2Cz_j) 。
+
 ![框架](https://user-images.githubusercontent.com/50043212/160055616-cc435788-7887-43ff-a88d-ca9450b01e69.jpg)
 
 以上是对SinCLR框架的较为笼统的叙述，下面具体地看每一步的做法：
@@ -63,6 +64,7 @@
 - **1.1 数据增强**
 
 比如batch size的大小是 ![[公式]](https://www.zhihu.com/equation?tex=N) ，实际使用的batch size是8192，为了方便我们假设 ![[公式]](https://www.zhihu.com/equation?tex=N%3D2) 。
+
 ![7](https://user-images.githubusercontent.com/50043212/160055680-2ce9ef60-2e00-4d0c-b59d-0cc90c8738e9.jpg)
 
 注意数据增强的方式有以下3种：
