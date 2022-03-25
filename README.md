@@ -115,6 +115,7 @@ random (crop + flip + color jitter + grayscale)
 - **1.3 预测头**
 
 使用预测头 Projection head。在 SimCLR 中，Encoder 得到的2个 visual representation再通过Prediction head (![[公式]](https://www.zhihu.com/equation?tex=g%28.%29))进一步提特征，预测头是一个 2 层的MLP，将 visual representation 这个 2048 维的向量![[公式]](https://www.zhihu.com/equation?tex=h_i%2Ch_j)进一步映射到 128 维隐空间中，得到新的representation ![[公式]](https://www.zhihu.com/equation?tex=z_i%2Cz_j)。利用 ![[公式]](https://www.zhihu.com/equation?tex=z_i%2Cz_j) 去求loss 完成训练，训练完毕后扔掉预测头，保留 Encoder 用于获取 visual representation。
+
 ![11](https://user-images.githubusercontent.com/50043212/160055756-76fd0cdf-d02d-47fd-af2f-004e8f7b8899.jpg)
 
 - **1.4 相似图片输出更接近**
