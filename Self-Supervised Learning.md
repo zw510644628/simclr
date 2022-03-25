@@ -10,7 +10,8 @@
 
 **以上这些就是 Self-Supervised Learning 的核心思想**，如下图所示。
 
-![self sup](F:\讲论文\要看的论文\self sup.jpg)
+![self sup](https://user-images.githubusercontent.com/50043212/160054981-274b2201-ffaf-4c95-adca-2d3f291a94ea.jpg)
+
 
 - **SimCLR 原理分析**
 
@@ -18,7 +19,7 @@
 
 **SimCLR** 是Hinton的Google Brain团队在 **Self-Supervised Learning** 领域的一个系列经典工作。先来通过图2直观地感受下它的性能：SimCLR (4×) 这个模型可以在 ImageNet 上面达到 **76.5%** 的 **Top 1** Accuracy，**比当时的 SOTA 模型高了7个点**。如果把这个预训练模型用 **1%的ImageNet的标签**给 **Fine-tune** 一下，借助这一点点的有监督信息，SimCLR 就可以再达到 **85.5%** 的 **Top 5** Accuracy。
 
-![85%](F:\讲论文\要看的论文\85%.jpg)
+![85%](https://user-images.githubusercontent.com/50043212/160055112-e6b4156f-77ed-41df-bf14-ee7e1943017b.jpg)
 
 **Self-Supervised Learning 的目的一般是使用大量的无 label 的资料去Pre-train一个模型，这么做的原因是无 label 的资料获取比较容易，且数量一般相当庞大，我们希望先用这些廉价的资料获得一个预训练的模型，接着根据下游任务的不同在不同的有 label 数据集上进行 Fine-tune 即可**。
 
@@ -28,7 +29,7 @@
 
 这个词翻译成中文是 **对比** 的意思，它的实质就是：**试图教机器区分相似和不相似的事物**。
 
-![4](F:\讲论文\要看的论文\4.jpg)
+![4](https://user-images.githubusercontent.com/50043212/160055135-b8618937-ed9e-4a4d-9bcb-85f31ded42c9.jpg)
 
 这个话是什么意思呢？比如说现在我们有任意的 4 张 images，如下图所示。前两张都是dog 这个类别，后两张是其他类别，以第1张图为例，我们就希望**它与第2张图的相似性越高越好，而与第3，第4张图的相似性越低越好**。
 
@@ -36,8 +37,7 @@
 
 1. 我们只有大堆images，没有任何标签，不知道哪些是 dog 这个类的，哪些是其他类的。
 2. 没办法找出哪些图片应该去 Maximize Similarity，哪些应该去 Minimize Similarity。
-
-![5](F:\讲论文\要看的论文\5.jpg)
+![5](https://user-images.githubusercontent.com/50043212/160055574-2b128486-a724-451a-8a95-eb75950ad6ac.jpg)
 
 所以，SimCLR是怎么解决这个问题的呢？它的framework如下图所示：
 
@@ -52,20 +52,18 @@
 ![[公式]](https://www.zhihu.com/equation?tex=z_i%3Dg%28h_i%29%3DW%5E%7B%282%29%7D%5Csigma+%28W%5E%7B%281%29%7Dh_i%29%5C%5C)
 
 接下来的目标就是最大化同一张图片得到的 ![[公式]](https://www.zhihu.com/equation?tex=z_i%2Cz_j) 。
-
-![框架](F:\讲论文\要看的论文\框架.jpg)
+![框架](https://user-images.githubusercontent.com/50043212/160055616-cc435788-7887-43ff-a88d-ca9450b01e69.jpg)
 
 以上是对SinCLR框架的较为笼统的叙述，下面具体地看每一步的做法：
 
 回到起点，一开始我们有的training corpus就是一大堆 unlabeled images，如下图所示。
 
-![6](F:\讲论文\要看的论文\6.jpg)
+![6](https://user-images.githubusercontent.com/50043212/160055645-31adaa95-60c7-4301-8600-1966de75ccd6.jpg)
 
 - **1.1 数据增强**
 
 比如batch size的大小是 ![[公式]](https://www.zhihu.com/equation?tex=N) ，实际使用的batch size是8192，为了方便我们假设 ![[公式]](https://www.zhihu.com/equation?tex=N%3D2) 。
-
-![7](F:\讲论文\要看的论文\7.jpg)
+![7](https://user-images.githubusercontent.com/50043212/160055680-2ce9ef60-2e00-4d0c-b59d-0cc90c8738e9.jpg)
 
 注意数据增强的方式有以下3种：
 
@@ -97,17 +95,16 @@ def get_color_distortion(s=1.0):
 random (crop + flip + color jitter + grayscale)
 ```
 
-![8](F:\讲论文\要看的论文\8.jpg)
+![8](https://user-images.githubusercontent.com/50043212/160055707-ae341b12-d3fb-44a0-8961-d05f1ee7b1c9.jpg)
 
 对每张图片我们得到2个不同的数据增强结果，所以1个Batch 一共有 4 个 Image。
-
-![9](F:\讲论文\要看的论文\9.jpg)
+![9](https://user-images.githubusercontent.com/50043212/160055720-769b6071-5569-4777-9cdc-ffe421ae2119.jpg)
 
 - **1.2 通过Encoder获取图片表征**
 
 第一步得到的2张图片 ![[公式]](https://www.zhihu.com/equation?tex=x_i%2Cx_j) 会通过Encoder获取图片的表征，如下图所示。所用的编码器是通用的，可以用其他架构代替。下面显示的2个编码器共享权重，我们得到向量 ![[公式]](https://www.zhihu.com/equation?tex=h_i%2Ch_j) 。
 
-![10](F:\讲论文\要看的论文\10.jpg)
+![10](https://user-images.githubusercontent.com/50043212/160055743-76cb5da5-1cef-4e6b-90b1-dd6c525bf5ed.jpg)
 
 本文使用了 **ResNet-50** 作为 **Encoder**，输出是 **2048** 维的向量 ![[公式]](https://www.zhihu.com/equation?tex=h) 。
 
@@ -116,18 +113,16 @@ random (crop + flip + color jitter + grayscale)
 - **1.3 预测头**
 
 使用预测头 Projection head。在 SimCLR 中，Encoder 得到的2个 visual representation再通过Prediction head (![[公式]](https://www.zhihu.com/equation?tex=g%28.%29))进一步提特征，预测头是一个 2 层的MLP，将 visual representation 这个 2048 维的向量![[公式]](https://www.zhihu.com/equation?tex=h_i%2Ch_j)进一步映射到 128 维隐空间中，得到新的representation ![[公式]](https://www.zhihu.com/equation?tex=z_i%2Cz_j)。利用 ![[公式]](https://www.zhihu.com/equation?tex=z_i%2Cz_j) 去求loss 完成训练，训练完毕后扔掉预测头，保留 Encoder 用于获取 visual representation。
-
-![11](F:\讲论文\要看的论文\11.jpg)
+![11](https://user-images.githubusercontent.com/50043212/160055756-76fd0cdf-d02d-47fd-af2f-004e8f7b8899.jpg)
 
 - **1.4 相似图片输出更接近**
 
 到这一步以后对于每个Batch，我们得到了如下图所示的Representation ![[公式]](https://www.zhihu.com/equation?tex=z_1%2C...%2Cz_4) 。
 
-![12](F:\讲论文\要看的论文\12.jpg)
+![12](https://user-images.githubusercontent.com/50043212/160055776-aca6c84b-d95f-4a97-b38d-6deff535434f.jpg)
 
 首先定义Representation之间的相似度：使用余弦相似度Cosine Similarity：
-
-![13](F:\讲论文\要看的论文\13.jpg)
+![13](https://user-images.githubusercontent.com/50043212/160055795-c60e7e55-5658-4d53-90db-809adb654b23.jpg)
 
 Cosine Similarity把计算两张 Augmented Images ![[公式]](https://www.zhihu.com/equation?tex=x_i%2Cx_j) 的相似度转化成了计算两个Projected Representation ![[公式]](https://www.zhihu.com/equation?tex=z_i%2Cz_j) 的相似度，定义为：
 
@@ -137,7 +132,7 @@ Cosine Similarity把计算两张 Augmented Images ![[公式]](https://www.zhihu.
 
 使用上述公式计算batch里面的每个Augmented Images ![[公式]](https://www.zhihu.com/equation?tex=x_i%2Cx_j) 的成对余弦相似度。 如下图所示，在理想情况下，狗的增强图像之间的相似度会很高，而狗和鲸鱼图像之间的相似度会较低。
 
-![14](F:\讲论文\要看的论文\14.jpg)
+![14](https://user-images.githubusercontent.com/50043212/160055827-dcd522ef-7fb1-4dff-bd49-1044eaf8df5d.jpg)
 
 现在我们有了衡量相似度的办法，但是这还不够，要最终转化成一个能够优化的 Loss Function 才可以。
 
@@ -145,35 +140,34 @@ SimCLR用了一种叫做 **NT-Xent loss** (**Normalized Temperature-Scaled Cross
 
 我们先拿出Batch里面的第1个Pair：
 
-![15](F:\讲论文\要看的论文\15.jpg)
+![15](https://user-images.githubusercontent.com/50043212/160055849-3c24cfc0-5137-4c3d-a9d7-ce2c98718978.jpg)
 
 使用 softmax 函数来获得这两个图像相似的概率：
 
-![16](F:\讲论文\要看的论文\16.jpg)
+![16](https://user-images.githubusercontent.com/50043212/160055866-f0f42403-83fe-4119-9810-d908c1806e20.jpg)
 
 这种 softmax 计算等价于获得第2张增强的狗的图像与该对中的第1张狗的图像最相似的概率。 在这里，分母中的其余的项都是其他图片的增强之后的图片，也是negative samples。
 
 所以我们希望上面的softmax的结果尽量大，所以损失函数取了softmax的负对数：
 
 ![[公式]](https://www.zhihu.com/equation?tex=%5Cmathcal%7Bl%7D%28i%2Cj%29%3D-%5Clog%5Cfrac%7B%5Cexp%28s_%7Bi%2Cj%7D%29%7D%7B%5Csum_%7Bk%3D1%7D%5E%7B2N%7D%7B%5Cmathbf%7B1%7D%5Bk%21%3Di%5D%5Cexp%28s_%7Bi%2Ck%7D%29%7D%7D%5C%5C)
-
-![17](F:\讲论文\要看的论文\17.jpg)
+![17](https://user-images.githubusercontent.com/50043212/160055888-5d4a7baf-a669-423d-bf0c-511e1f96c37f.jpg)
 
 再对同一对图片交换位置以后计算损失：
 
-![18](F:\讲论文\要看的论文\18.jpg)
+![18](https://user-images.githubusercontent.com/50043212/160055912-f282e232-092f-4795-aa82-aea6d6e65052.jpg)
 
 最后，计算每个Batch里面的所有Pair的损失之和取平均：
 
 ![[公式]](https://www.zhihu.com/equation?tex=L%3D%5Cfrac%7B1%7D%7B2N%7D%5Csum_%7Bk%3D1%7D%5E%7BN%7D%5B%7Bl%282k-1%2C2k%29%7D%2Bl%282k%2C2k-1%29%5D%5C%5C)
 
-![19](F:\讲论文\要看的论文\19.jpg)
+![19](https://user-images.githubusercontent.com/50043212/160055934-51a47132-6e56-430d-9d6a-80cae396a2e8.jpg)
 
 - **1.5 对下游任务Fine-tune**
 
 至此我们通过对比学习，巧妙地在没有任何标签的情况下训练好了 SimCLR 模型，使得其Encoder的输出可以像正常有监督训练的模型一样表示图片的Representation信息。所以接下来就是利用这些 Representation的时候了，也就是在下游任务上Fine-tune。一旦 SimCLR 模型在对比学习任务上得到训练，它就可以用于迁移学习，如 ImageNet 分类，如下图所示。此时在下游任务上 Fine-tune 模型时需要labeled data，但是数据量可以很小了。
 
-![20](F:\讲论文\要看的论文\20.jpg)
+![20](https://user-images.githubusercontent.com/50043212/160055949-37e3ec80-b9f4-40df-875f-d7daa8bb3794.jpg)
 
 **性能：**
 
@@ -193,7 +187,7 @@ SimCLR (4×) 这个模型可以在 ImageNet 上面达到 **76.5%** 的 **Top 1**
 
 Linear Evaluation 和 Fine-tuning的精度的关系如下图所示：当Linear Evaluation 的精度达到76.5% Top1 Accuracy时，Fine-tuning的精度达到了50多，因为Fine-tuning 只使用了1%的标签，而Linear Evaluation 使用了100%的标签。
 
-![img](https://pic3.zhimg.com/80/v2-f07b8f7427c3fd51b8acb0b3c5e5bc8e_720w.jpg)
+![21](https://user-images.githubusercontent.com/50043212/160056298-41724ffe-b545-41b0-81c4-9d9b7d38ff05.png)
 
 
 
@@ -205,9 +199,8 @@ Linear Evaluation 和 Fine-tuning的精度的关系如下图所示：当Linear E
 
 就是假设我们把 Projection head 前面的 hidden layer ![[公式]](https://www.zhihu.com/equation?tex=h) 作为图片的representation的话，那么经过线性分类层得到的模型性能是好的。如果把Projection head 后面的 hidden layer ![[公式]](https://www.zhihu.com/equation?tex=g%28h%29) 作为图片的representation的话，那么经过线性分类层得到的模型性能不好，如下图所示，是对 ![[公式]](https://www.zhihu.com/equation?tex=h) 或者 ![[公式]](https://www.zhihu.com/equation?tex=g%28h%29) 分别训练一个额外的MLP， ![[公式]](https://www.zhihu.com/equation?tex=h) 或者 ![[公式]](https://www.zhihu.com/equation?tex=g%28h%29)的hidden dimension 都是2048。
 
-![img](https://pic3.zhimg.com/80/v2-8571f62aecfbb757dac8e0d010ceea76_720w.jpg)
-
-![img](https://pic1.zhimg.com/80/v2-ba0b5e89a2beadce641f5a65a2a67198_720w.jpg)
+![22](https://user-images.githubusercontent.com/50043212/160056334-00c508bf-911a-4fa7-a70d-3ce7a0e34f83.png)
+![23](https://user-images.githubusercontent.com/50043212/160056358-f8d7ae94-2a53-413e-80a6-a4876607e7d6.jpg)
 
 
 
@@ -315,5 +308,5 @@ a1*b1, a1*b2, a1*b3,  -INF,  a1*a2, a1*a3
 
 **答4：**有关系。如下图所示，作者发现当使用较小的 training epochs 时，大的 Batch size 的性能显著优于小的 Batch size 的性能。作者发现当使用较大的 training epochs 时，大的 Batch size 的性能和小的 Batch size 的性能越来越接近。这一点其实很好理解：在对比学习中，较大的 Batch size 提供更多的 negative examples，能促进收敛。更长的 training epochs 也提供了更多的 negative examples，改善结果。
 
-![img](https://pic2.zhimg.com/80/v2-abaadd07744ba458567843a277552b8d_720w.jpg)
+![24](https://user-images.githubusercontent.com/50043212/160056446-2935a972-44a8-4f1a-8d33-19bc464d3f53.jpg)
 
